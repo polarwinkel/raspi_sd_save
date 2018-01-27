@@ -1,0 +1,11 @@
+no_swap: true
+
+use_tmpfs: true
+
+tmpfs:
+  /var/log:
+    size: 100m
+  /var/tmp:
+    size: 30m
+  /tmp:
+    size: 100m

@@ -1,0 +1,37 @@
+---
+
+- name: point writes to tmpfs
+  when: use_tmpfs
+  become: true
+  become_user: root
+  lineinfile:
+    dest: /etc/fstab
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: 'tmpfs[ |\t]+/tmp*', line: 'tmpfs  /tmp  tmpfs  defaults,noatime,nosuid,size={{tmpfs["/var/log"]["size"]}}  0 0' }
+    - { regexp: 'tmpfs[ |\t]+/var/tmp*', line: 'tmpfs  /var/tmp  tmpfs  defaults,noatime,nosuid,size=30m  0 0' }
+#    - { regexp: 'tmpfs[ |\t]+/var/log*', line: 'tmpfs  /var/log  tmpfs  defaults,noatime,nosuid,mode=0666,size=100m  0 0' }
+    - { regexp: 'tmpfs[ |\t]+/var/log/nginx*', line: 'tmpfs  /var/log/nginx  tmpfs  defaults,noatime,nosuid,mode=0666,size=30m  0 0' }
+    - { regexp: 'tmpfs[ |\t]+/var/spool/mqueue*', line: 'tmpfs  /var/spool/mqueue  tmpfs  defaults,noatime,nosuid,mode=0700,gid=12,size=30m  0 0' }
+
+- name: turn off swap
+  when: no_swap
+  become: true
+  become_user: root
+  command: "{{ item }}"
+  with_items:
+   - dphys-swapfile swapoff
+   - dphys-swapfile uninstall
+   - update-rc.d dphys-swapfile remove
+
+- name: Reboot server
+  become: true
+  become_user: root
+  shell: sleep 2 && shutdown -r now
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: Wait for the server to finish rebooting
+  local_action: wait_for host={{ ansible_ssh_host }} state=started port=22 delay=30 timeout=300 connect_timeout=15
