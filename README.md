@@ -3,11 +3,11 @@ An Ansible-Role to protect your Raspberry-Pi-SD-Card from it's early death / Kee
 
 ## Why this is here
 
-My Raspberry-Pi's keep eating my micro-sd-cards like - well - like raspberrys.
+My Raspberry-Pi's kept eating my micro-sd-cards like - well - like raspberrys.
 
 This is, as I think, due to unfortunate default settings in the raspbian image.
 
-An sd-card is not suitable to act as a swap or for permanent logging. So there is a need for raspbian to stop doing it.
+An sd-card is not suitable to act as swap-space or for permanent logging. So there is a need for raspbian to stop doing that.
 
 ## What this does
 
@@ -36,8 +36,8 @@ sudo update-rc.d dphys-swapfile remove
 
 ## How to use this
 
-If you are comfortable with Ansible you probably won't read this.
+If you are comfortable with Ansible you most likely don't read this.
 
-If you are not DONT clone this, just appy the changes described before manually.
+Obviously you are not: just appy the changes described above manually, and ignore the rest.
 
-Or have a loog at [Ansible](https://www.ansible.com/)!
+Or have a look at [Ansible](https://www.ansible.com/), especially if you will need to do this more often!
