@@ -16,8 +16,11 @@
     - { regexp: 'tmpfs[ |\t]+/var/spool/mqueue*', line: 'tmpfs  /var/spool/mqueue  tmpfs  defaults,noatime,nosuid,mode=0700,gid=12,size=30m  0 0' }
   register: reboot
 
+- name: check swap
+  command: free -m | grep Swap
+  register: swap_result
+
 - name: turn off swap
-  when: no_swap
   become: true
   become_user: root
   command: "{{ item }}"
@@ -25,7 +28,7 @@
    - dphys-swapfile swapoff
    - dphys-swapfile uninstall
    - update-rc.d dphys-swapfile remove
-  register: reboot
+  when: swap_result.stdout.find('Swap:000\n') == false
 
 - name: Reboot server
   become: true
