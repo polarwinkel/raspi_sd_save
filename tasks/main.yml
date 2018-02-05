@@ -19,6 +19,7 @@
 - name: check swap
   command: free -m | grep Swap
   register: swap_result
+  changed_when: False
 
 - name: turn off swap
   become: true
