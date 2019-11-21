@@ -29,7 +29,7 @@
    - dphys-swapfile swapoff
    - dphys-swapfile uninstall
    - update-rc.d dphys-swapfile remove
-  when: swap_result.stdout.find('Swap:000\n') == false
+  when: swap_result.stdout.replace(' ', '').find('Swap:000') == -1
 
 - name: Reboot server
   become: true
