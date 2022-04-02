@@ -17,7 +17,7 @@
   register: reboot
 
 - name: check swap
-  command: free -m | grep Swap
+  shell: 'free -m | grep Swap'
   register: swap_result
   changed_when: False
 
